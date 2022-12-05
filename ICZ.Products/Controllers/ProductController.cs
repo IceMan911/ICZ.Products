@@ -89,6 +89,21 @@ namespace ICZ.Products.Controllers
 
         }
 
+        [HttpGet()]
+        [Route("Products")]
+        public async Task<ActionResult<ListOfProduct>> getProducts()
+        {
+            DBaseProduct lData = new DBaseProduct(_config);
+            var lreturn = await lData.getProducts( _config.GetConnectionString("OrderDatabase"));
+
+            if (lreturn == null && lreturn.products == null && lreturn.products.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return lreturn;
+        }
+
     }
 }
 

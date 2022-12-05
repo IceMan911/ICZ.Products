@@ -196,5 +196,49 @@ namespace ICZ.Products.DB
 			return lReturn;
 		}
 
+		public async Task<ListOfProduct> getProducts(string ConnectionStringMSSQL)
+		{
+			ListOfProduct lReturn = new ListOfProduct();
+			SqlDataReader lReader;
+
+			try
+			{
+				using (mConnection = new SqlConnection(ConnectionStringMSSQL))
+				{
+					SqlCommand lCmd;
+					string command = string.Empty;
+					command = @"SELECT pd.product_id as IdProduct, pd.product_name as ProductName, ct.category_id as IdCategory, ct.category_name as CategoryName, pd.product_cost as ProductCost FROM Product pd LEFT JOIN Category ct on pd.category_id = ct.category_id";
+					using (lCmd = new SqlCommand(command, mConnection))
+					{
+						lReader = AsyncExeReaderMethod(mConnection, lCmd).Result;
+						if (lReader.HasRows)
+						{
+							using (DataTable lTable = new DataTable())
+							{
+								lTable.Load(lReader);
+								int lSentinel = lTable.Rows.Count;
+								for (int i = 0; i < lSentinel; i++)
+									lReturn.products.Add(ReflectPropertyInfo.ReflectType<Product>(lTable.Rows[i]));
+							}
+						}
+					}
+				}
+				mConnection.Close();
+			}
+			catch (SqlException sqlEx) // This will catch all SQL exceptions
+			{
+				//_logger.LogError(string.Format("SqlException: Message:{0} StackTrace{1}", sqlEx.Message, sqlEx.StackTrace));
+			}
+			catch (InvalidOperationException iOpEx) // This will catch SqlConnection Exception
+			{
+				//_logger.LogError(string.Format("InvalidOperationException: Message:{0} StackTrace{1}", iOpEx.Message, iOpEx.StackTrace));
+			}
+			catch (Exception ex) // this will catch all exceptions
+			{
+				//_logger.LogError(string.Format("Exception: Message:{0} StackTrace{1}", ex.Message, ex.StackTrace));
+			}
+			return lReturn;
+		}
+
 	}
 }
