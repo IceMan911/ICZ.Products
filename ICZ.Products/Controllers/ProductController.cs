@@ -70,6 +70,25 @@ namespace ICZ.Products.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> DeleteStack(Guid id)
+        {
+            bool lReturn = false;
+
+            DBaseProduct lData = new DBaseProduct(_config);
+            lReturn = await lData.deleteProduct(id, _config.GetConnectionString("OrderDatabase"));
+
+            if (lReturn)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
     }
 }
 
