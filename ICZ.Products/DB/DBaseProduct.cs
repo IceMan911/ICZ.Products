@@ -109,5 +109,50 @@ namespace ICZ.Products.DB
 			return lReturn;
 		}
 
+		public async Task<bool> updateProduct(Product product, string ConnectionStringMSSQL)
+		{
+			bool lReturn = false;
+			SqlConnection mConnection;
+			try
+			{
+				using (mConnection = new SqlConnection(ConnectionStringMSSQL))
+				{
+					SqlCommand lCmd;
+					string command = string.Empty;
+					int iAffectedRows = 0;
+
+					command = @"UPDATE Product SET product_name = @ProductName, product_cost = @ProductCost, category_id = @IdCategory WHERE product_id = @IdProduct";
+					using (lCmd = new SqlCommand(command, mConnection))
+					{
+						lCmd.Parameters.AddWithValue("@ProductName", product.ProductName);
+						lCmd.Parameters.AddWithValue("@ProductCost", product.ProductCost);
+						lCmd.Parameters.AddWithValue("@IdCategory", product.IdCategory);
+						lCmd.Parameters.AddWithValue("@IdProduct", product.IdProduct);
+
+						iAffectedRows = AsyncExeExecuteMethod(mConnection, lCmd).Result;
+						if (iAffectedRows == 1)
+							lReturn = true;
+					}
+				}
+				mConnection.Close();
+			}
+			catch (SqlException sqlEx) // This will catch all SQL exceptions
+			{
+				lReturn = false;
+				//_logger.LogError(string.Format("SqlException: Message:{0} StackTrace{1}", sqlEx.Message, sqlEx.StackTrace));
+			}
+			catch (InvalidOperationException iOpEx) // This will catch SqlConnection Exception
+			{
+				lReturn = false;
+				//_logger.LogError(string.Format("InvalidOperationException: Message:{0} StackTrace{1}", iOpEx.Message, iOpEx.StackTrace));
+			}
+			catch (Exception ex) // this will catch all exceptions
+			{
+				lReturn = false;
+				//_logger.LogError(string.Format("Exception: Message:{0} StackTrace{1}", ex.Message, ex.StackTrace));
+			}
+			return lReturn;
+		}
+
 	}
 }

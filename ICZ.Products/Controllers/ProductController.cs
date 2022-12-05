@@ -51,6 +51,25 @@ namespace ICZ.Products.Controllers
 
         }
 
+        [HttpPut("Update")]
+        public async Task<IActionResult> updateProduct(Product product)
+        {
+            bool lReturn = false;
+
+            DBaseProduct lData = new DBaseProduct(_config);
+            lReturn = await lData.updateProduct(product, _config.GetConnectionString("OrderDatabase"));
+
+            if (lReturn)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
     }
 }
 
