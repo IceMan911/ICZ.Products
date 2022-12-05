@@ -1,5 +1,6 @@
 ﻿using ICZ.Products.DB;
 using ICZ.Products.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -30,6 +31,24 @@ namespace ICZ.Products.Controllers
             }
 
             return productDetail;
+        }
+
+        [HttpPost]
+        [Route("Create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> createProduct(Product product)
+        {
+            bool lReturn = false;
+
+            DBaseProduct lData = new DBaseProduct(_config);
+            lReturn = await lData.createProduct(product, _config.GetConnectionString("OrderDatabase"));
+
+            if (lReturn)
+                return Ok(lReturn);
+            else
+                return Problem("DB doesnt consume data", "createProduct", 500, "DBaseProduct", "Error");
+
         }
 
     }
