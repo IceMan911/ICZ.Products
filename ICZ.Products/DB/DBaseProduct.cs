@@ -196,9 +196,9 @@ namespace ICZ.Products.DB
 			return lReturn;
 		}
 
-		public async Task<ListOfProduct> getProducts(string ConnectionStringMSSQL)
+		public async Task<List<Product>> getProducts(string ConnectionStringMSSQL)
 		{
-			ListOfProduct lReturn = new ListOfProduct();
+			List<Product> lReturn = new List<Product>();
 			SqlDataReader lReader;
 
 			try
@@ -218,7 +218,7 @@ namespace ICZ.Products.DB
 								lTable.Load(lReader);
 								int lSentinel = lTable.Rows.Count;
 								for (int i = 0; i < lSentinel; i++)
-									lReturn.products.Add(ReflectPropertyInfo.ReflectType<Product>(lTable.Rows[i]));
+									lReturn.Add(ReflectPropertyInfo.ReflectType<Product>(lTable.Rows[i]));
 							}
 						}
 					}

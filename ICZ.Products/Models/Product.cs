@@ -22,14 +22,4 @@ namespace ICZ.Products.Models
         public Decimal ProductCost { get; set; }
 
     }
-
-    public class ListOfProduct
-    {
-        public List<Product> products;
-
-        public ListOfProduct()
-        {
-            products = new List<Product>();
-        }
-    }
 }

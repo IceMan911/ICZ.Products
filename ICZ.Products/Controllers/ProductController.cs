@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ICZ.Products.Controllers
@@ -91,12 +92,12 @@ namespace ICZ.Products.Controllers
 
         [HttpGet()]
         [Route("Products")]
-        public async Task<ActionResult<ListOfProduct>> getProducts()
+        public async Task<ActionResult<List<Product>>> getProducts()
         {
             DBaseProduct lData = new DBaseProduct(_config);
             var lreturn = await lData.getProducts( _config.GetConnectionString("OrderDatabase"));
 
-            if (lreturn == null && lreturn.products == null && lreturn.products.Count == 0)
+            if (lreturn == null && lreturn == null && lreturn.Count == 0)
             {
                 return NotFound();
             }
