@@ -319,5 +319,21 @@ namespace ICZ.Products.DB
 		*
 		*/
 
+		/*
+		 * TODO prehled poctu objednavek po je mesicich za dane obdobi (vyuzit sql)
+		 *
+		 * varianta, ktera vyuziva funkce year, month a PARTITION by
+		 *
+		SELECT distinct
+		YEAR(order_created) as YEAR,
+		MONTH(order_created) as Month,
+		count(order_id) OVER (PARTITION BY MONTH(order_created), YEAR(order_created)) AS numberOfOrders
+		FROM [OrderAndProduct].[dbo].[Order]
+		where order_created BETWEEN '2022-01-01 00:00:00.000' and '2023-01-01 00:00:00.000'
+		order by YEAR, Month
+		*
+		*
+		*/
+
 	}
 }
