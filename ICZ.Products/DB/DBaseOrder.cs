@@ -158,136 +158,35 @@ namespace ICZ.Products.DB
 			return lReturn;
 		}
 
-		//public async Task<bool> updateProduct(Product product, string ConnectionStringMSSQL)
-		//{
-		//	bool lReturn = false;
-		//	SqlConnection mConnection;
-		//	try
-		//	{
-		//		using (mConnection = new SqlConnection(ConnectionStringMSSQL))
-		//		{
-		//			SqlCommand lCmd;
-		//			string command = string.Empty;
-		//			int iAffectedRows = 0;
+		/*
+		 * TODO ziskani vsech objednavek
+		 *
+		 * implementace by byla velmi podobna metode getOrderDetail() s rozdilem, ze by SQL dotaz nemel podminku na konkretni objednavku dle ID
+		 * ziskani objednavky podle ID a vsech objednavek by mohlo byt implementovano ve stylu jedne metody, ktera dle parametru provede ziskani dat z DB
+		 * Rozdil by byl v post processingu, ktery vytvari konceny objekt, kde nejsou duplicitni informace o objednavce
+		 * Teoreticky pri velkem mnozstvi dat se nabizi omezeni v poctu zobrazeni zaznamu a nebo pouziti logiky (offset a fetch)
+		 *
+		 */
 
-		//			command = @"UPDATE Product SET product_name = @ProductName, product_cost = @ProductCost, category_id = @IdCategory WHERE product_id = @IdProduct";
-		//			using (lCmd = new SqlCommand(command, mConnection))
-		//			{
-		//				lCmd.Parameters.AddWithValue("@ProductName", product.ProductName);
-		//				lCmd.Parameters.AddWithValue("@ProductCost", product.ProductCost);
-		//				lCmd.Parameters.AddWithValue("@IdCategory", product.IdCategory);
-		//				lCmd.Parameters.AddWithValue("@IdProduct", product.IdProduct);
+		/*
+		 * TODO smazani objednavky
+		 *
+		 * implementace by byla velmi podobna metode deleteProduct, akorat s tim, ze by se meli dodatecne smazat i polozky objednavky
+		 * nicmene pri navrhu databaze byla pouzito SQL kliceove slovo CASCADE, takze v pripade smazani objednavky dle ID se z tabulky OrderItem smazou i zaznamy dane objednavky
+		 *
+		 *
+		 */
 
-		//				iAffectedRows = AsyncExeExecuteMethod(mConnection, lCmd).Result;
-		//				if (iAffectedRows == 1)
-		//					lReturn = true;
-		//			}
-		//		}
-		//		mConnection.Close();
-		//	}
-		//	catch (SqlException sqlEx) // This will catch all SQL exceptions
-		//	{
-		//		lReturn = false;
-		//		//_logger.LogError(string.Format("SqlException: Message:{0} StackTrace{1}", sqlEx.Message, sqlEx.StackTrace));
-		//	}
-		//	catch (InvalidOperationException iOpEx) // This will catch SqlConnection Exception
-		//	{
-		//		lReturn = false;
-		//		//_logger.LogError(string.Format("InvalidOperationException: Message:{0} StackTrace{1}", iOpEx.Message, iOpEx.StackTrace));
-		//	}
-		//	catch (Exception ex) // this will catch all exceptions
-		//	{
-		//		lReturn = false;
-		//		//_logger.LogError(string.Format("Exception: Message:{0} StackTrace{1}", ex.Message, ex.StackTrace));
-		//	}
-		//	return lReturn;
-		//}
-
-		//public async Task<bool> deleteProduct(Guid idProduct, string ConnectionStringMSSQL)
-		//{
-		//	bool lReturn = false;
-		//	SqlConnection mConnection;
-		//	try
-		//	{
-		//		using (mConnection = new SqlConnection(ConnectionStringMSSQL))
-		//		{
-		//			SqlCommand lCmd;
-		//			string command = string.Empty;
-		//			int iAffectedRows = 0;
-
-		//			command = @"DELETE FROM Product WHERE product_id = @IdProduct";
-		//			using (lCmd = new SqlCommand(command, mConnection))
-		//			{
-		//				lCmd.Parameters.AddWithValue("@IdProduct", idProduct);
-
-		//				iAffectedRows = AsyncExeExecuteMethod(mConnection, lCmd).Result;
-		//				if (iAffectedRows == 1)
-		//					lReturn = true;
-		//			}
-		//		}
-		//		mConnection.Close();
-		//	}
-		//	catch (SqlException sqlEx) // This will catch all SQL exceptions
-		//	{
-		//		lReturn = false;
-		//		//_logger.LogError(string.Format("SqlException: Message:{0} StackTrace{1}", sqlEx.Message, sqlEx.StackTrace));
-		//	}
-		//	catch (InvalidOperationException iOpEx) // This will catch SqlConnection Exception
-		//	{
-		//		lReturn = false;
-		//		//_logger.LogError(string.Format("InvalidOperationException: Message:{0} StackTrace{1}", iOpEx.Message, iOpEx.StackTrace));
-		//	}
-		//	catch (Exception ex) // this will catch all exceptions
-		//	{
-		//		lReturn = false;
-		//		//_logger.LogError(string.Format("Exception: Message:{0} StackTrace{1}", ex.Message, ex.StackTrace));
-		//	}
-		//	return lReturn;
-		//}
-
-		//public async Task<List<Product>> getProducts(string ConnectionStringMSSQL)
-		//{
-		//	List<Product> lReturn = new List<Product>();
-		//	SqlDataReader lReader;
-
-		//	try
-		//	{
-		//		using (mConnection = new SqlConnection(ConnectionStringMSSQL))
-		//		{
-		//			SqlCommand lCmd;
-		//			string command = string.Empty;
-		//			command = @"SELECT pd.product_id as IdProduct, pd.product_name as ProductName, ct.category_id as IdCategory, ct.category_name as CategoryName, pd.product_cost as ProductCost FROM Product pd LEFT JOIN Category ct on pd.category_id = ct.category_id";
-		//			using (lCmd = new SqlCommand(command, mConnection))
-		//			{
-		//				lReader = AsyncExeReaderMethod(mConnection, lCmd).Result;
-		//				if (lReader.HasRows)
-		//				{
-		//					using (DataTable lTable = new DataTable())
-		//					{
-		//						lTable.Load(lReader);
-		//						int lSentinel = lTable.Rows.Count;
-		//						for (int i = 0; i < lSentinel; i++)
-		//							lReturn.Add(ReflectPropertyInfo.ReflectType<Product>(lTable.Rows[i]));
-		//					}
-		//				}
-		//			}
-		//		}
-		//		mConnection.Close();
-		//	}
-		//	catch (SqlException sqlEx) // This will catch all SQL exceptions
-		//	{
-		//		//_logger.LogError(string.Format("SqlException: Message:{0} StackTrace{1}", sqlEx.Message, sqlEx.StackTrace));
-		//	}
-		//	catch (InvalidOperationException iOpEx) // This will catch SqlConnection Exception
-		//	{
-		//		//_logger.LogError(string.Format("InvalidOperationException: Message:{0} StackTrace{1}", iOpEx.Message, iOpEx.StackTrace));
-		//	}
-		//	catch (Exception ex) // this will catch all exceptions
-		//	{
-		//		//_logger.LogError(string.Format("Exception: Message:{0} StackTrace{1}", ex.Message, ex.StackTrace));
-		//	}
-		//	return lReturn;
-		//}
+		/*
+		 * TODO uprava objednavky
+		 *
+		 * implementace by byla velmi podobna metode createProduct, protoze je zapotrebi upravit zaznam v tabulce Order nebo OrderItem
+		 * nejdulezitejsim faktorem je jaky pristup zvolit a jak urcit upravene zaznamy z FE
+		 * pouzil bych opet prichozi JSON zpravu (Objekt v c#), ktery by obsahoval u kazdeho parametru parametr s bool
+		 * parametr bool by urcoval, jestli se zmenila dana polozku a podle toho by se menil zaznam v DB
+		 *
+		 *
+		 */
 
 		/*
 		 * TODO ziskani nejprodavanejsich produktu podle kategorie (vyuzit sql)
