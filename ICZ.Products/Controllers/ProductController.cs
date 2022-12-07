@@ -105,6 +105,15 @@ namespace ICZ.Products.Controllers
             return lreturn;
         }
 
+
+        /*
+         * TODO import a export seznamu produku do csv (xml)
+         * se samotnou implementaci importu a exportu nemam zadne zkusenosti a je urcite skoda, ze jsem si neudelal na ni cas
+         * nicmene z projektu skladu modulu vim, ze implementace pozadovanch funkcionalit neni vubec jednoducha a jeji odladeni zabere pomerne dlouhou dobu
+         * to znamena ze bych sel cestou pouziti nejake placeneho balicku/knihovny, ktera je odladena a hlavne 100% funkcni
+         *
+         * */
+
     }
 }
 
