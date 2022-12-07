@@ -1,3 +1,6 @@
+If you want to use my project: 
+git clone git@github.com:IceMan911/ICZ.Products.git
+
 DB:
 Mé řešení celkově obsahuje čtyři tabulky:
 Category - číselník kategorií
