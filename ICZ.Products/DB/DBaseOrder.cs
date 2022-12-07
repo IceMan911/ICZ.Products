@@ -289,5 +289,35 @@ namespace ICZ.Products.DB
 		//	return lReturn;
 		//}
 
+		/*
+		 * TODO ziskani nejprodavanejsich produktu podle kategorie (vyuzit sql)
+		 *
+		 *	1. varianta vyuziti WITH, pocitany pouze odeslane objednavky
+		 *
+		WITH ProductWithRowNumber(category_name, product_name, total, row) as
+		(SELECT c.category_name, pr.product_name, sum(oi.quantity) as total, ROW_NUMBER() OVER(partition by c.category_name ORDER BY SUM(oi.quantity) DESC) AS RowNumber
+		FROM [OrderAndProduct].[dbo].[Order] o
+		left join OrderItem oi on o.order_id = oi.order_id
+		left join Product pr on oi.product_id = pr.product_id
+		left join Category c on pr.category_id = c.category_id
+		WHERE item_id is not null and o.status = 'shipped'
+		group by c.category_name, pr.product_name)
+		SELECT  category_name, product_name, total FROM ProductWithRowNumber
+		WHERE row = 1
+		*
+		* 2. varianta vyuziti vnoreneho dotazu, kde jsou pocitany veskere objednavky
+		*
+		select category_name, product_name, total from
+		(SELECT c.category_name, pr.product_name, sum(oi.quantity) as total, ROW_NUMBER() OVER(partition by c.category_name ORDER BY SUM(oi.quantity) DESC) AS RowNumber
+		FROM [OrderAndProduct].[dbo].[Order] o
+		left join OrderItem oi on o.order_id = oi.order_id
+		left join Product pr on oi.product_id = pr.product_id
+		left join Category c on pr.category_id = c.category_id
+		WHERE item_id is not null
+		group by c.category_name, pr.product_name) as temporatyQuery
+		where RowNumber = 1
+		*
+		*/
+
 	}
 }
